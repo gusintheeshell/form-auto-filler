@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Form AutoFiller",
+  "version": "1.0",
+  "description": "Automatically fill form fields using a JSON object",
+  "permissions": ["activeTab", "scripting", "clipboardRead"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
