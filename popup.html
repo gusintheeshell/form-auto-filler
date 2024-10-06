@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fill Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        width: 300px;
+      }
+      textarea {
+        width: 100%;
+        height: 100px;
+      }
+      #fill-form {
+        margin-top: 10px;
+        width: 100%;
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+      }
+      #fill-form:hover {
+        background-color: #45a049;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+      #json-history {
+        margin-top: 20px;
+        padding: 0;
+        list-style-type: none;
+      }
+      #json-history li {
+        background-color: #f1f1f1;
+        margin: 5px 0;
+        padding: 5px;
+        border-radius: 3px;
+        font-size: 12px;
+      }
+      #error-message {
+        color: red;
+        margin-top: 10px;
+        display: none;
+        font-size: 12px;
+      }
+      .tooltip {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 5px;
+        z-index: 1;
+      }
+      #clear-history {
+        margin-top: 10px;
+        width: 100%;
+        background-color: #f44336;
+        color: white;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+      }
+      #clear-history:hover {
+        background-color: #e53935;
+      }
+      #clear-form {
+        margin-top: 10px;
+        width: 100%;
+        background-color: #2196f3;
+        color: white;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+      }
+      #clear-form:hover {
+        background-color: #1e88e5;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Fill Form</h2>
+    <textarea
+      id="json-input"
+      rows="5"
+      placeholder="Paste your JSON here..."
+    ></textarea>
+    <br />
+    <input type="checkbox" id="auto-fill-checkbox" checked /> Auto-fill on paste
+    <br />
+    <button id="fill-form">Fill</button>
+    <button id="clear-form">Clear Fields</button>
+    <button id="clear-history">Clear History</button>
+    <div id="error-message"></div>
+    <h3>JSON History</h3>
+    <ul id="json-history"></ul>
+    <script src="popup.js"></script>
+  </body>
+</html>
