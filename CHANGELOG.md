@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/gusintheeshell/form-auto-filler/compare/v1.1.0...v1.2.0) (2024-10-06)
+
+
+### Features
+
+* add icons for chrome web store ([80bc5fc](https://github.com/gusintheeshell/form-auto-filler/commit/80bc5fc273dc202b975f1ec71e1d072f6cbe4f94))
+* add icons for chrome web store and update manifest.json ([eda1f60](https://github.com/gusintheeshell/form-auto-filler/commit/eda1f60ab37d10380c6a62c4fed63951310de16e))
+
 ## 1.1.0 (2024-10-06)
 
 
