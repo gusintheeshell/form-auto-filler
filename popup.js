@@ -1,107 +1,102 @@
 function fillForm(json) {
   let notFoundFields = [];
+  let filledFields = [];
+  
   for (let key in json) {
     let value = json[key];
-    let input = document.querySelector(`[name="${key}"], [id="${key}"]`);
-
-    if (Array.isArray(value)) {
-      value.forEach((item, index) => {
-        if (typeof item === "object") {
-          for (let subKey in item) {
-            let subInput = document.querySelector(
-              `[name="${key}[${index}][${subKey}]"], [id="${key}_${index}_${subKey}"]`
-            );
-            if (subInput) {
-              subInput.value = item[subKey];
-            } else {
-              notFoundFields.push(`${key}[${index}][${subKey}]`);
-            }
+    
+    // First, try to find inputs by name, then by id
+    let inputs = document.querySelectorAll(`[name="${key}"]`);
+    if (inputs.length === 0) {
+      let inputById = document.querySelector(`[id="${key}"]`);
+      if (inputById) {
+        inputs = [inputById];
+      }
+    }
+    
+    if (inputs.length === 0) {
+      notFoundFields.push(key);
+      continue;
+    }
+    
+    // Handle different input types
+    inputs.forEach((input) => {
+      if (input.type === "checkbox") {
+        // Handle checkbox inputs
+        if (Array.isArray(value)) {
+          // For arrays, check if the checkbox value is in the array
+          if (value.includes(input.value) || 
+              (input.value === "" && value.includes(true)) ||
+              (input.value === "on" && value.includes(true))) {
+            input.checked = true;
+            filledFields.push(`${key} (${input.value})`);
+          } else {
+            input.checked = false;
           }
         } else {
-          if (input) {
-            if (input.type === "checkbox" || input.type === "radio") {
-              // Fixed checkbox/radio logic for arrays
-              let options = document.querySelectorAll(`[name="${key}"]`);
-              if (options.length > 0) {
-                let found = false;
-                options.forEach((option) => {
-                  if (option.value === item.toString() || 
-                      (option.value === "" && item === true) ||
-                      (option.value === "on" && item === true)) {
-                    option.checked = true;
-                    found = true;
-                  }
-                });
-                if (!found) {
-                  notFoundFields.push(`${key}: ${item}`);
-                }
-              } else {
-                notFoundFields.push(`${key}: ${item}`);
-              }
-            } else if (input.nodeName === "SELECT" && input.multiple) {
-              let options = Array.from(input.options);
-              options.forEach((option) => {
-                if (value.includes(option.value)) {
-                  option.selected = true;
-                }
-              });
-            } else {
-              let dynamicInput = document.querySelector(
-                `[name="${key}[]"]:nth-child(${index + 1})`
-              );
-              if (dynamicInput) dynamicInput.value = item;
-              else notFoundFields.push(`${key}[]: ${item}`);
-            }
-          } else {
-            notFoundFields.push(key);
-          }
-        }
-      });
-    } else {
-      if (input) {
-        if (input.type === "checkbox") {
-          // Handle single checkbox with boolean or string value
+          // For single values, handle boolean, string, and number
           if (typeof value === "boolean") {
             input.checked = value;
           } else if (typeof value === "string") {
-            input.checked = value.toLowerCase() === "true" || value === "1" || value === "on";
+            input.checked = value.toLowerCase() === "true" || 
+                           value === "1" || 
+                           value === "on" ||
+                           value === input.value;
           } else if (typeof value === "number") {
-            input.checked = value === 1;
+            input.checked = value === 1 || value === parseInt(input.value);
           } else {
             input.checked = Boolean(value);
           }
-        } else if (input.type === "radio") {
-          // Handle single radio button
-          if (input.value === value.toString()) {
+          filledFields.push(`${key} (${input.value})`);
+        }
+      } else if (input.type === "radio") {
+        // Handle radio button inputs
+        if (Array.isArray(value)) {
+          // For arrays, check if the radio value is in the array
+          if (value.includes(input.value)) {
             input.checked = true;
-          } else {
-            // Try to find radio button with matching value
-            let radioGroup = document.querySelectorAll(`[name="${key}"]`);
-            let found = false;
-            radioGroup.forEach((radio) => {
-              if (radio.value === value.toString()) {
-                radio.checked = true;
-                found = true;
-              }
-            });
-            if (!found) {
-              notFoundFields.push(`${key}: ${value}`);
-            }
+            filledFields.push(`${key} (${input.value})`);
           }
         } else {
-          input.value = value;
+          // For single values, check if they match
+          if (input.value === value.toString()) {
+            input.checked = true;
+            filledFields.push(`${key} (${input.value})`);
+          }
+        }
+      } else if (input.nodeName === "SELECT" && input.multiple) {
+        // Handle multiple select
+        if (Array.isArray(value)) {
+          Array.from(input.options).forEach((option) => {
+            option.selected = value.includes(option.value);
+          });
+          filledFields.push(key);
+        }
+      } else if (Array.isArray(value)) {
+        // Handle array values for non-checkbox/radio inputs
+        if (value.length > 0) {
+          input.value = value[0]; // Use first value for single inputs
+          filledFields.push(key);
         }
       } else {
-        notFoundFields.push(key);
+        // Handle regular input fields
+        input.value = value;
+        filledFields.push(key);
       }
-    }
+    });
   }
   
-  // Log results to console for debugging (since we're in the page context)
+  // Log results to console for debugging
   if (notFoundFields.length > 0) {
     console.log("Form AutoFiller: Campos não encontrados:", notFoundFields);
     console.log("Form AutoFiller: Verifique se os nomes dos campos estão corretos no JSON");
-  } else {
+  }
+  
+  if (filledFields.length > 0) {
+    console.log("Form AutoFiller: Campos preenchidos:", filledFields);
+  }
+  
+  if (notFoundFields.length === 0) {
     console.log("Form AutoFiller: Todos os campos foram preenchidos com sucesso!");
   }
 }

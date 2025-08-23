@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test W3Schools Checkboxes - Form AutoFiller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .json-example {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .test-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .clear-button {
+            background-color: #f44336;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🧪 Test W3Schools Checkboxes - Form AutoFiller</h1>
+<p>Esta página replica o exemplo da W3Schools para testar a funcionalidade dos checkboxes.</p>
+
+<div class="test-section">
+    <h2>Formulário Original da W3Schools</h2>
+    
+    <form action="/action_page.php">
+        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+        <label for="vehicle1"> I have a bike</label><br>
+        
+        <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+        <label for="vehicle2"> I have a car</label><br>
+        
+        <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+        <label for="vehicle3"> I have a boat</label><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+<div class="test-section">
+    <h3>Teste 1: Checkboxes Individuais (Boolean)</h3>
+    <div class="json-example">
+        { "vehicle1": true, "vehicle2": false, "vehicle3": true }
+    </div>
+    <p><strong>Resultado esperado:</strong> Bike e Boat marcados, Car desmarcado</p>
+    <button class="test-button" onclick="testIndividualCheckboxes()">Testar</button>
+    <button class="clear-button" onclick="clearAllCheckboxes()">Limpar</button>
+    <div id="result1" class="result" style="display: none;"></div>
+</div>
+
+<div class="test-section">
+    <h3>Teste 2: Checkboxes com Valores Específicos</h3>
+    <div class="json-example">
+        { "vehicle1": "Bike", "vehicle2": "Car", "vehicle3": "Boat" }
+    </div>
+    <p><strong>Resultado esperado:</strong> Todos os checkboxes marcados</p>
+    <button class="test-button" onclick="testValueCheckboxes()">Testar</button>
+    <button class="clear-button" onclick="clearAllCheckboxes()">Limpar</button>
+    <div id="result2" class="result" style="display: none;"></div>
+</div>
+
+<div class="test-section">
+    <h3>Teste 3: Array de Valores</h3>
+    <div class="json-example">
+        { "vehicle1": ["Bike"], "vehicle2": ["Car"], "vehicle3": ["Boat"] }
+    </div>
+    <p><strong>Resultado esperado:</strong> Todos os checkboxes marcados</p>
+    <button class="test-button" onclick="testArrayCheckboxes()">Testar</button>
+    <button class="clear-button" onclick="clearAllCheckboxes()">Limpar</button>
+    <div id="result3" class="result" style="display: none;"></div>
+</div>
+
+<div class="test-section">
+    <h3>Teste 4: Apenas Bike e Boat</h3>
+    <div class="json-example">
+        { "vehicle1": true, "vehicle2": false, "vehicle3": true }
+    </div>
+    <p><strong>Resultado esperado:</strong> Apenas Bike e Boat marcados</p>
+    <button class="test-button" onclick="testPartialCheckboxes()">Testar</button>
+    <button class="clear-button" onclick="clearAllCheckboxes()">Limpar</button>
+    <div id="result4" class="result" style="display: none;"></div>
+</div>
+
+<div class="test-section">
+    <h3>Teste 5: Nenhum Checkbox</h3>
+    <div class="json-example">
+        { "vehicle1": false, "vehicle2": false, "vehicle3": false }
+    </div>
+    <p><strong>Resultado esperado:</strong> Todos os checkboxes desmarcados</p>
+    <button class="test-button" onclick="testNoCheckboxes()">Testar</button>
+    <button class="clear-button" onclick="clearAllCheckboxes()">Limpar</button>
+    <div id="result5" class="result" style="display: none;"></div>
+</div>
+
+<script>
+    // Test functions
+    function testIndividualCheckboxes() {
+        clearAllCheckboxes();
+        
+        // Simulate the Form AutoFiller logic
+        const checkboxes = {
+            'vehicle1': true,
+            'vehicle2': false,
+            'vehicle3': true
+        };
+        
+        fillFormTest(checkboxes);
+        showResult('result1', 'Teste concluído! Bike e Boat devem estar marcados, Car desmarcado.', 'success');
+    }
+    
+    function testValueCheckboxes() {
+        clearAllCheckboxes();
+        
+        const checkboxes = {
+            'vehicle1': 'Bike',
+            'vehicle2': 'Car',
+            'vehicle3': 'Boat'
+        };
+        
+        fillFormTest(checkboxes);
+        showResult('result2', 'Teste concluído! Todos os checkboxes devem estar marcados.', 'success');
+    }
+    
+    function testArrayCheckboxes() {
+        clearAllCheckboxes();
+        
+        const checkboxes = {
+            'vehicle1': ['Bike'],
+            'vehicle2': ['Car'],
+            'vehicle3': ['Boat']
+        };
+        
+        fillFormTest(checkboxes);
+        showResult('result3', 'Teste concluído! Todos os checkboxes devem estar marcados.', 'success');
+    }
+    
+    function testPartialCheckboxes() {
+        clearAllCheckboxes();
+        
+        const checkboxes = {
+            'vehicle1': true,
+            'vehicle2': false,
+            'vehicle3': true
+        };
+        
+        fillFormTest(checkboxes);
+        showResult('result4', 'Teste concluído! Apenas Bike e Boat devem estar marcados.', 'success');
+    }
+    
+    function testNoCheckboxes() {
+        clearAllCheckboxes();
+        
+        const checkboxes = {
+            'vehicle1': false,
+            'vehicle2': false,
+            'vehicle3': false
+        };
+        
+        fillFormTest(checkboxes);
+        showResult('result5', 'Teste concluído! Todos os checkboxes devem estar desmarcados.', 'success');
+    }
+    
+    function clearAllCheckboxes() {
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+        // Hide all result divs
+        document.querySelectorAll('.result').forEach(div => {
+            div.style.display = 'none';
+        });
+    }
+    
+    function fillFormTest(json) {
+        // Simplified version of the Form AutoFiller logic for testing
+        for (let key in json) {
+            let value = json[key];
+            let inputs = document.querySelectorAll(`[name="${key}"]`);
+            
+            if (inputs.length > 0) {
+                inputs.forEach((input) => {
+                    if (input.type === "checkbox") {
+                        if (Array.isArray(value)) {
+                            if (value.includes(input.value) || 
+                                (input.value === "" && value.includes(true)) ||
+                                (input.value === "on" && value.includes(true))) {
+                                input.checked = true;
+                            } else {
+                                input.checked = false;
+                            }
+                        } else {
+                            if (typeof value === "boolean") {
+                                input.checked = value;
+                            } else if (typeof value === "string") {
+                                input.checked = value.toLowerCase() === "true" || 
+                                               value === "1" || 
+                                               value === "on" ||
+                                               value === input.value;
+                            } else if (typeof value === "number") {
+                                input.checked = value === 1 || value === parseInt(input.value);
+                            } else {
+                                input.checked = Boolean(value);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+    
+    function showResult(elementId, message, type) {
+        const element = document.getElementById(elementId);
+        element.textContent = message;
+        element.className = `result ${type}`;
+        element.style.display = 'block';
+    }
+    
+    // Auto-hide results after 5 seconds
+    function autoHideResults() {
+        setTimeout(() => {
+            document.querySelectorAll('.result').forEach(div => {
+                div.style.display = 'none';
+            });
+        }, 5000);
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('Página de teste carregada. Use os botões para testar diferentes cenários.');
+        autoHideResults();
+    });
+</script>
+
+</body>
+</html>
