@@ -2,25 +2,43 @@ function fillForm(json) {
   let notFoundFields = [];
   let filledFields = [];
   
+  console.log("Form AutoFiller: Iniciando preenchimento do formulário");
+  console.log("Form AutoFiller: JSON recebido:", json);
+  
   for (let key in json) {
     let value = json[key];
     
+    console.log(`Form AutoFiller: Processando campo "${key}" com valor:`, value);
+    
     // First, try to find inputs by name, then by id
     let inputs = document.querySelectorAll(`[name="${key}"]`);
+    console.log(`Form AutoFiller: Inputs encontrados por name="${key}":`, inputs.length);
+    
     if (inputs.length === 0) {
       let inputById = document.querySelector(`[id="${key}"]`);
+      console.log(`Form AutoFiller: Input encontrado por id="${key}":`, inputById ? "Sim" : "Não");
       if (inputById) {
         inputs = [inputById];
       }
     }
     
+    // Debug: mostrar todos os inputs na página
     if (inputs.length === 0) {
+      console.log(`Form AutoFiller: Nenhum input encontrado para "${key}"`);
+      console.log("Form AutoFiller: Todos os inputs na página:");
+      document.querySelectorAll('input').forEach((input, index) => {
+        console.log(`  ${index}: type="${input.type}", name="${input.name}", id="${input.id}", value="${input.value}"`);
+      });
       notFoundFields.push(key);
       continue;
     }
     
+    console.log(`Form AutoFiller: Processando ${inputs.length} input(s) para "${key}"`);
+    
     // Handle different input types
-    inputs.forEach((input) => {
+    inputs.forEach((input, index) => {
+      console.log(`Form AutoFiller: Input ${index}: type="${input.type}", name="${input.name}", id="${input.id}", value="${input.value}"`);
+      
       if (input.type === "checkbox") {
         // Handle checkbox inputs
         if (Array.isArray(value)) {
@@ -30,22 +48,28 @@ function fillForm(json) {
               (input.value === "on" && value.includes(true))) {
             input.checked = true;
             filledFields.push(`${key} (${input.value})`);
+            console.log(`Form AutoFiller: Checkbox "${key}" marcado com valor "${input.value}"`);
           } else {
             input.checked = false;
+            console.log(`Form AutoFiller: Checkbox "${key}" desmarcado com valor "${input.value}"`);
           }
         } else {
           // For single values, handle boolean, string, and number
           if (typeof value === "boolean") {
             input.checked = value;
+            console.log(`Form AutoFiller: Checkbox "${key}" definido como ${value} (boolean)`);
           } else if (typeof value === "string") {
             input.checked = value.toLowerCase() === "true" || 
                            value === "1" || 
                            value === "on" ||
                            value === input.value;
+            console.log(`Form AutoFiller: Checkbox "${key}" definido como ${input.checked} (string: "${value}")`);
           } else if (typeof value === "number") {
             input.checked = value === 1 || value === parseInt(input.value);
+            console.log(`Form AutoFiller: Checkbox "${key}" definido como ${input.checked} (number: ${value})`);
           } else {
             input.checked = Boolean(value);
+            console.log(`Form AutoFiller: Checkbox "${key}" definido como ${input.checked} (other: ${value})`);
           }
           filledFields.push(`${key} (${input.value})`);
         }
@@ -56,12 +80,14 @@ function fillForm(json) {
           if (value.includes(input.value)) {
             input.checked = true;
             filledFields.push(`${key} (${input.value})`);
+            console.log(`Form AutoFiller: Radio "${key}" selecionado com valor "${input.value}"`);
           }
         } else {
           // For single values, check if they match
           if (input.value === value.toString()) {
             input.checked = true;
             filledFields.push(`${key} (${input.value})`);
+            console.log(`Form AutoFiller: Radio "${key}" selecionado com valor "${input.value}"`);
           }
         }
       } else if (input.nodeName === "SELECT" && input.multiple) {
@@ -71,17 +97,20 @@ function fillForm(json) {
             option.selected = value.includes(option.value);
           });
           filledFields.push(key);
+          console.log(`Form AutoFiller: Select múltiplo "${key}" preenchido`);
         }
       } else if (Array.isArray(value)) {
         // Handle array values for non-checkbox/radio inputs
         if (value.length > 0) {
           input.value = value[0]; // Use first value for single inputs
           filledFields.push(key);
+          console.log(`Form AutoFiller: Campo "${key}" preenchido com valor "${value[0]}"`);
         }
       } else {
         // Handle regular input fields
         input.value = value;
         filledFields.push(key);
+        console.log(`Form AutoFiller: Campo "${key}" preenchido com valor "${value}"`);
       }
     });
   }
@@ -99,6 +128,8 @@ function fillForm(json) {
   if (notFoundFields.length === 0) {
     console.log("Form AutoFiller: Todos os campos foram preenchidos com sucesso!");
   }
+  
+  console.log("Form AutoFiller: Preenchimento concluído");
 }
 
 function clearForm(json) {
