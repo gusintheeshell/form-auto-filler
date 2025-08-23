@@ -96,10 +96,18 @@ function fillForm(json) {
       }
     }
   }
-  displayErrorMessage(notFoundFields);
+  
+  // Log results to console for debugging (since we're in the page context)
+  if (notFoundFields.length > 0) {
+    console.log("Form AutoFiller: Campos não encontrados:", notFoundFields);
+    console.log("Form AutoFiller: Verifique se os nomes dos campos estão corretos no JSON");
+  } else {
+    console.log("Form AutoFiller: Todos os campos foram preenchidos com sucesso!");
+  }
 }
 
 function clearForm(json) {
+  let clearedFields = [];
   for (let key in json) {
     let input = document.querySelector(`[name="${key}"], [id="${key}"]`);
 
@@ -109,17 +117,20 @@ function clearForm(json) {
           Array.from(input.options).forEach((option) => {
             option.selected = false;
           });
+          clearedFields.push(key);
         } else if (input.type === "checkbox" || input.type === "radio") {
           // Clear all checkboxes/radio buttons with the same name
           let options = document.querySelectorAll(`[name="${key}"]`);
           options.forEach((option) => {
             option.checked = false;
           });
+          clearedFields.push(key);
         } else {
           let dynamicInputs = document.querySelectorAll(`[name="${key}[]"]`);
           dynamicInputs.forEach((dynamicInput) => {
             dynamicInput.value = "";
           });
+          clearedFields.push(key);
         }
       }
     } else {
@@ -130,11 +141,20 @@ function clearForm(json) {
           options.forEach((option) => {
             option.checked = false;
           });
+          clearedFields.push(key);
         } else {
           input.value = "";
+          clearedFields.push(key);
         }
       }
     }
+  }
+  
+  // Log results to console for debugging
+  if (clearedFields.length > 0) {
+    console.log("Form AutoFiller: Campos limpos:", clearedFields);
+  } else {
+    console.log("Form AutoFiller: Nenhum campo foi encontrado para limpar");
   }
 }
 
