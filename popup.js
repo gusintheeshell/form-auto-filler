@@ -20,11 +20,24 @@ function fillForm(json) {
         } else {
           if (input) {
             if (input.type === "checkbox" || input.type === "radio") {
-              let option = document.querySelector(
-                `[name="${key}"][value="${item}"]`
-              );
-              if (option) option.checked = true;
-              else notFoundFields.push(`${key}: ${item}`);
+              // Fixed checkbox/radio logic for arrays
+              let options = document.querySelectorAll(`[name="${key}"]`);
+              if (options.length > 0) {
+                let found = false;
+                options.forEach((option) => {
+                  if (option.value === item.toString() || 
+                      (option.value === "" && item === true) ||
+                      (option.value === "on" && item === true)) {
+                    option.checked = true;
+                    found = true;
+                  }
+                });
+                if (!found) {
+                  notFoundFields.push(`${key}: ${item}`);
+                }
+              } else {
+                notFoundFields.push(`${key}: ${item}`);
+              }
             } else if (input.nodeName === "SELECT" && input.multiple) {
               let options = Array.from(input.options);
               options.forEach((option) => {
@@ -46,7 +59,38 @@ function fillForm(json) {
       });
     } else {
       if (input) {
-        input.value = value;
+        if (input.type === "checkbox") {
+          // Handle single checkbox with boolean or string value
+          if (typeof value === "boolean") {
+            input.checked = value;
+          } else if (typeof value === "string") {
+            input.checked = value.toLowerCase() === "true" || value === "1" || value === "on";
+          } else if (typeof value === "number") {
+            input.checked = value === 1;
+          } else {
+            input.checked = Boolean(value);
+          }
+        } else if (input.type === "radio") {
+          // Handle single radio button
+          if (input.value === value.toString()) {
+            input.checked = true;
+          } else {
+            // Try to find radio button with matching value
+            let radioGroup = document.querySelectorAll(`[name="${key}"]`);
+            let found = false;
+            radioGroup.forEach((radio) => {
+              if (radio.value === value.toString()) {
+                radio.checked = true;
+                found = true;
+              }
+            });
+            if (!found) {
+              notFoundFields.push(`${key}: ${value}`);
+            }
+          }
+        } else {
+          input.value = value;
+        }
       } else {
         notFoundFields.push(key);
       }
@@ -66,7 +110,11 @@ function clearForm(json) {
             option.selected = false;
           });
         } else if (input.type === "checkbox" || input.type === "radio") {
-          input.checked = false;
+          // Clear all checkboxes/radio buttons with the same name
+          let options = document.querySelectorAll(`[name="${key}"]`);
+          options.forEach((option) => {
+            option.checked = false;
+          });
         } else {
           let dynamicInputs = document.querySelectorAll(`[name="${key}[]"]`);
           dynamicInputs.forEach((dynamicInput) => {
@@ -77,7 +125,11 @@ function clearForm(json) {
     } else {
       if (input) {
         if (input.type === "checkbox" || input.type === "radio") {
-          input.checked = false;
+          // Clear all checkboxes/radio buttons with the same name
+          let options = document.querySelectorAll(`[name="${key}"]`);
+          options.forEach((option) => {
+            option.checked = false;
+          });
         } else {
           input.value = "";
         }

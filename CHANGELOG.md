@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.1](https://github.com/gusintheeshell/form-auto-filler/compare/v1.2.0...v1.2.1) (2024-12-18)
+
+### Bug Fixes
+
+* **checkbox**: Fix checkbox and radio button input handling ([#2](https://github.com/gusintheeshell/form-auto-filler/issues/2))
+  - Fixed selector logic for checkbox and radio button inputs
+  - Added support for boolean values in JSON for checkbox states
+  - Improved handling of multiple checkboxes with the same name
+  - Added support for checkboxes with empty values
+  - Enhanced radio button selection logic
+  - Fixed clear form functionality for checkboxes and radio buttons
+
+### Testing
+
+* Added comprehensive test page for checkbox functionality validation
+
 ## [1.2.0](https://github.com/gusintheeshell/form-auto-filler/compare/v1.1.0...v1.2.0) (2024-10-06)
 
 

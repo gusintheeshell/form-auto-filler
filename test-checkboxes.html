@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Checkboxes - Form AutoFiller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .checkbox-group {
+            margin: 10px 0;
+        }
+        .checkbox-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+        .json-example {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .test-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background-color: #45a049;
+        }
+        .clear-button {
+            background-color: #f44336;
+        }
+        .clear-button:hover {
+            background-color: #da190b;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Checkboxes - Form AutoFiller</h1>
+    <p>This page demonstrates the corrected checkbox functionality for the Form AutoFiller extension.</p>
+
+    <div class="form-group">
+        <h3>Single Checkbox</h3>
+        <label>
+            <input type="checkbox" name="acceptTerms" value="true"> I accept the terms and conditions
+        </label>
+        
+        <div class="json-example">
+            <strong>JSON to test:</strong><br>
+            { "acceptTerms": true }
+        </div>
+        
+        <button class="test-button" onclick="testSingleCheckbox()">Test Single Checkbox</button>
+        <button class="clear-button" onclick="clearSingleCheckbox()">Clear</button>
+    </div>
+
+    <div class="form-group">
+        <h3>Multiple Checkboxes (Same Name)</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="interests" value="sports"> Sports</label>
+            <label><input type="checkbox" name="interests" value="music"> Music</label>
+            <label><input type="checkbox" name="interests" value="reading"> Reading</label>
+            <label><input type="checkbox" name="interests" value="travel"> Travel</label>
+        </div>
+        
+        <div class="json-example">
+            <strong>JSON to test:</strong><br>
+            { "interests": ["sports", "reading"] }
+        </div>
+        
+        <button class="test-button" onclick="testMultipleCheckboxes()">Test Multiple Checkboxes</button>
+        <button class="clear-button" onclick="clearMultipleCheckboxes()">Clear</button>
+    </div>
+
+    <div class="form-group">
+        <h3>Checkbox with Empty Value</h3>
+        <label>
+            <input type="checkbox" name="newsletter" value=""> Subscribe to newsletter
+        </label>
+        
+        <div class="json-example">
+            <strong>JSON to test:</strong><br>
+            { "newsletter": true }
+        </div>
+        
+        <button class="test-button" onclick="testEmptyValueCheckbox()">Test Empty Value</button>
+        <button class="clear-button" onclick="clearEmptyValueCheckbox()">Clear</button>
+    </div>
+
+    <div class="form-group">
+        <h3>Radio Buttons</h3>
+        <div class="checkbox-group">
+            <label><input type="radio" name="gender" value="male"> Male</label>
+            <label><input type="radio" name="gender" value="female"> Female</label>
+            <label><input type="radio" name="gender" value="other"> Other</label>
+        </div>
+        
+        <div class="json-example">
+            <strong>JSON to test:</strong><br>
+            { "gender": "female" }
+        </div>
+        
+        <button class="test-button" onclick="testRadioButtons()">Test Radio Buttons</button>
+        <button class="clear-button" onclick="clearRadioButtons()">Clear</button>
+    </div>
+
+    <div class="form-group">
+        <h3>Mixed Form with Checkboxes</h3>
+        <label>Name: <input type="text" name="fullName" placeholder="Enter your name"></label><br><br>
+        <label>Email: <input type="email" name="email" placeholder="Enter your email"></label><br><br>
+        
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="preferences" value="email"> Email notifications</label>
+            <label><input type="checkbox" name="preferences" value="sms"> SMS notifications</label>
+            <label><input type="checkbox" name="preferences" value="push"> Push notifications</label>
+        </div>
+        
+        <div class="json-example">
+            <strong>JSON to test:</strong><br>
+            {<br>
+            &nbsp;&nbsp;"fullName": "John Doe",<br>
+            &nbsp;&nbsp;"email": "john@example.com",<br>
+            &nbsp;&nbsp;"preferences": ["email", "push"]<br>
+            }
+        </div>
+        
+        <button class="test-button" onclick="testMixedForm()">Test Mixed Form</button>
+        <button class="clear-button" onclick="clearMixedForm()">Clear All</button>
+    </div>
+
+    <script>
+        // Test functions for each form section
+        function testSingleCheckbox() {
+            const checkbox = document.querySelector('input[name="acceptTerms"]');
+            checkbox.checked = true;
+        }
+
+        function clearSingleCheckbox() {
+            const checkbox = document.querySelector('input[name="acceptTerms"]');
+            checkbox.checked = false;
+        }
+
+        function testMultipleCheckboxes() {
+            const checkboxes = document.querySelectorAll('input[name="interests"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.value === 'sports' || checkbox.value === 'reading') {
+                    checkbox.checked = true;
+                }
+            });
+        }
+
+        function clearMultipleCheckboxes() {
+            const checkboxes = document.querySelectorAll('input[name="interests"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+
+        function testEmptyValueCheckbox() {
+            const checkbox = document.querySelector('input[name="newsletter"]');
+            checkbox.checked = true;
+        }
+
+        function clearEmptyValueCheckbox() {
+            const checkbox = document.querySelector('input[name="newsletter"]');
+            checkbox.checked = false;
+        }
+
+        function testRadioButtons() {
+            const radio = document.querySelector('input[name="gender"][value="female"]');
+            radio.checked = true;
+        }
+
+        function clearRadioButtons() {
+            const radios = document.querySelectorAll('input[name="gender"]');
+            radios.forEach(radio => {
+                radio.checked = false;
+            });
+        }
+
+        function testMixedForm() {
+            // Fill text fields
+            document.querySelector('input[name="fullName"]').value = 'John Doe';
+            document.querySelector('input[name="email"]').value = 'john@example.com';
+            
+            // Fill checkboxes
+            const checkboxes = document.querySelectorAll('input[name="preferences"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.value === 'email' || checkbox.value === 'push') {
+                    checkbox.checked = true;
+                }
+            });
+        }
+
+        function clearMixedForm() {
+            // Clear text fields
+            document.querySelector('input[name="fullName"]').value = '';
+            document.querySelector('input[name="email"]').value = '';
+            
+            // Clear checkboxes
+            const checkboxes = document.querySelectorAll('input[name="preferences"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+    </script>
+</body>
+</html>
